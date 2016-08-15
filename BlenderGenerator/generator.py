@@ -1,9 +1,11 @@
 import bpy
 import random
+import math
 from mathutils import Vector
 
 #grid_size = 
 available_levels = [0.0]
+objects = []
 
 def clear_scene():
 	"""
@@ -32,7 +34,10 @@ def add_light():
 	scene.objects.active = lamp_obj
 
 def check_for_collision():
-    
+    pass
+
+def color():
+    objects = [item.name for item in bpy.data.objects if item.type == "MESH"]
 
 def create_mesh(name, origin, verts, faces):
 	"""
@@ -60,19 +65,27 @@ def random_generate(num):
         initial_loc = (random.randrange(-5, 5), random.randrange(-5, 5), 0)
         origin = Vector(initial_loc)
         (x, y, z) = (random.random(), random.random(), random.random())
-        verts = ((x,x,-1), (x,-x,-1), (-x,-x,-1), (-x,x,-1), (0,0,1))
-        faces = ((1,0,4), (4,2,1), (4,3,2), (4,0,3), (0,1,2,3))
-        cone1 = create_mesh('DataCone', origin, verts, faces)
-        """
-        verts = ((x,x,-1), (x,-x,-1), (-x,-x,-1), (-x,x,-1), (x,x,1), (x,-x,1), (-x,-x,1), (-x,x,1))
-        faces = ((10, 1, 2, 3), (1, 2, 5, 6), (2, 3, 4, 5), (10, 3, 4, 7), (10, 1, 6, 7), (4, 5, 6, 7))
-        cone1 = create_mesh('DataCone', origin, verts, faces)
-        """
+        choose_shape = math.floor(random.randrange(0, 3))
+        if choose_shape == 0:
+            verts = ((x,x,-1), (x,-x,-1), (-x,-x,-1), (-x,x,-1), (0,0,1))
+            faces = ((1,0,4), (4,2,1), (4,3,2), (4,0,3), (0,1,2,3))
+            cone = create_mesh('Cone', origin, verts, faces)
+        else:
+            verts = [(x, x, -x),(x, -x, -x),(-x, -x, -x),(-x, x, -x),(x, x, x),(x, -x, x),(-x, -x, x),(-x, x, x)]
+            faces = [(0, 1, 2, 3),(4, 7, 6, 5),(0, 4, 5, 1),(1, 5, 6, 2),(2, 6, 7, 3),(4, 0, 3, 7)]
+            cube = create_mesh('Cube', origin, verts, faces)
 
+def log():
+    f = open('session.txt', 'w')
+    for obj in objects:
+        f.write(obj.type)
+        
 def run():
     clear_scene()
     add_light()
-    random_generate(4)
+    random_generate(6)
+    #log('session.txt')
+    log()
     return
 
 if __name__ == "__main__":  
