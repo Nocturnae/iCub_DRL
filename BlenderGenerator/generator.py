@@ -1,4 +1,9 @@
 import bpy
+import random
+from mathutils import Vector
+
+#grid_size = 
+available_levels = [0.0]
 
 def clear_scene():
 	"""
@@ -26,9 +31,49 @@ def add_light():
 	lamp_obj.select = True
 	scene.objects.active = lamp_obj
 
-def run():
-	clear_scene()
-	add_light()
+def check_for_collision():
+    
 
-if __name__ == "__main__":
+def create_mesh(name, origin, verts, faces):
+	"""
+	create mesh and add it to scene
+	"""
+	mesh = bpy.data.meshes.new(name + 'Mesh')
+	obj = bpy.data.objects.new(name, mesh)
+	obj.location = origin
+	obj.show_name = True
+
+	scene = bpy.context.scene
+	scene.objects.link(obj)
+	scene.objects.active = obj
+	obj.select = True
+
+	mesh.from_pydata(verts, [], faces)
+
+	mesh.update()
+
+	return obj
+
+def random_generate(num):
+    while num:
+        num -= 1
+        initial_loc = (random.randrange(-5, 5), random.randrange(-5, 5), 0)
+        origin = Vector(initial_loc)
+        (x, y, z) = (random.random(), random.random(), random.random())
+        verts = ((x,x,-1), (x,-x,-1), (-x,-x,-1), (-x,x,-1), (0,0,1))
+        faces = ((1,0,4), (4,2,1), (4,3,2), (4,0,3), (0,1,2,3))
+        cone1 = create_mesh('DataCone', origin, verts, faces)
+        """
+        verts = ((x,x,-1), (x,-x,-1), (-x,-x,-1), (-x,x,-1), (x,x,1), (x,-x,1), (-x,-x,1), (-x,x,1))
+        faces = ((10, 1, 2, 3), (1, 2, 5, 6), (2, 3, 4, 5), (10, 3, 4, 7), (10, 1, 6, 7), (4, 5, 6, 7))
+        cone1 = create_mesh('DataCone', origin, verts, faces)
+        """
+
+def run():
+    clear_scene()
+    add_light()
+    random_generate(4)
+    return
+
+if __name__ == "__main__":  
 	run()
