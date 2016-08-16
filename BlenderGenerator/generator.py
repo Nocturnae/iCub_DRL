@@ -1,7 +1,16 @@
+# usr/bin/bash -tt
+
 import bpy
 import random
 import math
 from mathutils import Vector
+
+"""
+TODO:
+    check collisions
+    random coloring
+    dynamically increasing levels
+"""
 
 #grid_size = 
 available_levels = [0.0]
@@ -36,9 +45,26 @@ def add_light():
 def check_for_collision():
     pass
 
-def color():
-    objects = [item.name for item in bpy.data.objects if item.type == "MESH"]
+def make_material(name, diffuse, specular, alpha):
+	mat = bpy.data.materials.new(name)
+	mat.diffuse_color = diffuse
+	mat.diffuse_shader = 'LAMBERT'
+	mat.diffuse_intensity = 1.0
+	mat.specular_color = specular
+	mat.specular_shader = 'COOKTORR'
+	mat.specular_intensity = 0.5
+	mat.alpha = alpha
+	mat.ambient = 1
+	return mat
 
+def color():
+    objects = [item for item in bpy.data.objects if item.type == "MESH"]
+    for obj in objects:
+	    # create random material
+	    random_color = make_material('colorName', (random.random(), random.random(), random.random()), (random.random(), random.random(), random.random()), random.random())
+	    obj.data.materials.append(random_color)
+
+        
 def create_mesh(name, origin, verts, faces):
 	"""
 	create mesh and add it to scene
@@ -75,17 +101,20 @@ def random_generate(num):
             faces = [(0, 1, 2, 3),(4, 7, 6, 5),(0, 4, 5, 1),(1, 5, 6, 2),(2, 6, 7, 3),(4, 0, 3, 7)]
             cube = create_mesh('Cube', origin, verts, faces)
 
-def log():
-    f = open('session.txt', 'w')
+def log(filename):
+    f = open("/Users/zeynep/Desktop" + filename, 'w')
+    """
     for obj in objects:
         f.write(obj.type)
+    """
+    f.write("asdkjaksdj")
         
 def run():
     clear_scene()
     add_light()
     random_generate(6)
-    #log('session.txt')
-    log()
+    color()
+    #log("sess.txt")
     return
 
 if __name__ == "__main__":  
