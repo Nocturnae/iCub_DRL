@@ -8,8 +8,7 @@ from mathutils import Vector
 """
 TODO:
     check collisions
-    random coloring
-    dynamically increasing levels
+    improve log
 """
 
 #grid_size = 
@@ -88,7 +87,7 @@ def create_mesh(name, origin, verts, faces):
 def random_generate(num):
     while num:
         num -= 1
-        initial_loc = (random.randrange(-5, 5), random.randrange(-5, 5), 0)
+        initial_loc = (random.randrange(-5, 5), random.randrange(-5, 5), random.choice(available_levels))
         origin = Vector(initial_loc)
         (x, y, z) = (random.random(), random.random(), random.random())
         choose_shape = math.floor(random.randrange(0, 3))
@@ -99,6 +98,7 @@ def random_generate(num):
         else:
             verts = [(x, x, -x),(x, -x, -x),(-x, -x, -x),(-x, x, -x),(x, x, x),(x, -x, x),(-x, -x, x),(-x, x, x)]
             faces = [(0, 1, 2, 3),(4, 7, 6, 5),(0, 4, 5, 1),(1, 5, 6, 2),(2, 6, 7, 3),(4, 0, 3, 7)]
+            available_levels.append(2 * x)
             cube = create_mesh('Cube', origin, verts, faces)
 
 def log(filename):
