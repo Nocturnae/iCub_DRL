@@ -287,6 +287,7 @@ class RandomDesktopGenerator:
 
         for obj in bpy.data.objects:
             f.write("Object #" + str(item_no) + "\n")
+            item_no += 1
             obj_type = None
             if obj.name.startswith("Cu"):
                 obj_type = "CUBE"
@@ -306,7 +307,7 @@ class RandomDesktopGenerator:
                 col = obj.data.materials[0].diffuse_color
                 f.write("Color: " + str(col[0]) + " " + str(col[1]) + " " + str(col[2]) + "\n")
             else:
-                f.write("Color: NA")
+                f.write("Color: NA\n")
 
             f.write("\n")
 
