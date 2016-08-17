@@ -4,6 +4,7 @@ import bpy
 import random
 import math
 from mathutils import Vector
+import os
 
 """
 TODO:
@@ -109,20 +110,19 @@ def create_mesh(name, origin, verts, faces):
 	"""
 	mesh = bpy.data.meshes.new(name + 'Mesh')
 	obj = bpy.data.objects.new(name, mesh)
-	if check_x(name) and check_y(name) and check_z(name):
-		obj.location = origin
-		obj.show_name = True
+	obj.location = origin
+	obj.show_name = True
 
-		scene = bpy.context.scene
-		scene.objects.link(obj)
-		scene.objects.active = obj
-		obj.select = True
+	scene = bpy.context.scene
+	scene.objects.link(obj)
+	scene.objects.active = obj
+	obj.select = True
 
-		mesh.from_pydata(verts, [], faces)
+	mesh.from_pydata(verts, [], faces)
 
-		mesh.update()
+	mesh.update()
 
-		return obj
+	return obj
 
 def random_generate(num):
     while num:
@@ -141,12 +141,23 @@ def random_generate(num):
             available_levels.append(2 * x)
             cube = create_mesh('Cube', origin, verts, faces)
 
+def save_files(sample_no):
+	try:
+		dir_path = "/Users/zeynep/Development/iCub_DRL/BlenderGenerator"
+		for no in range(1, sample_no + 1):
+			os.makedirs(dir_path + "/Samples/sample_" + str(no))
+			for s in range(1, len(bpy.data.objects) + 1):
+				log(dir_path + "/Samples/sample_" + str(no) + '/scene_info_' + str(s))
+	except OSError as e:
+		return
+
 def log(filename):
-    f = open("/Users/zeynep/Desktop" + filename, 'w')
-    """
-    for obj in objects:
+    f = open(filename, 'w')
+
+    for obj in bpy.data.objects.items():
         f.write(obj.type)
-    """
+        #print(obj[1].type)
+
     f.write("asdkjaksdj")
         
 def run():
@@ -157,5 +168,8 @@ def run():
     #log("sess.txt")
     return
 
+def attempt():
+	save_files(3)
+
 if __name__ == "__main__":  
-	run()
+	attempt()
