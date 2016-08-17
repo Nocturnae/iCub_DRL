@@ -44,6 +44,45 @@ def add_light():
 def check_for_collision():
     pass
 
+def check_x(object_name):
+	objects = [item.name for item in bpy.data.objects if item.type == "MESH"]
+	loc = bpy.data.objects[object_name].location.x
+	size = bpy.data.objects[object_name].dimensions.x
+	for obj in objects:
+		loc2 = bpy.data.objects[obj].location.x
+		size2 = bpy.data.objects[obj].dimensions.x
+		if abs(loc - loc2) < size + size2:
+			return False
+	return True
+
+def check_y(object_name):
+	objects = [item.name for item in bpy.data.objects if item.type == "MESH"]
+	loc = bpy.data.objects[object_name].location.y
+	size = bpy.data.objects[object_name].dimensions.y
+	for obj in objects:
+		loc2 = bpy.data.objects[obj].location.y
+		size2 = bpy.data.objects[obj].dimensions.y
+		if abs(loc - loc2) < size + size2:
+			return False
+	return True
+
+def check_z(object_name):
+	objects = [item.name for item in bpy.data.objects if item.type == "MESH"]
+	loc = bpy.data.objects[object_name].location.z
+	size = bpy.data.objects[object_name].dimensions.z
+	for obj in objects:
+		loc2 = bpy.data.objects[obj].location.z
+		size2 = bpy.data.objects[obj].dimensions.z
+		if abs(loc - loc2) < size + size2:
+			return False
+	return True
+
+def check_cog(object_name):
+    objects = [item.name for item in bpy.data.objects if item.type == "MESH"]
+    for obj in objects:
+        #if euclidean_distance(bpy.data.objects[object_name], obj) >= obj.
+        pass
+
 def make_material(name, diffuse, specular, alpha):
 	mat = bpy.data.materials.new(name)
 	mat.diffuse_color = diffuse
@@ -70,19 +109,20 @@ def create_mesh(name, origin, verts, faces):
 	"""
 	mesh = bpy.data.meshes.new(name + 'Mesh')
 	obj = bpy.data.objects.new(name, mesh)
-	obj.location = origin
-	obj.show_name = True
+	if check_x(name) and check_y(name) and check_z(name):
+		obj.location = origin
+		obj.show_name = True
 
-	scene = bpy.context.scene
-	scene.objects.link(obj)
-	scene.objects.active = obj
-	obj.select = True
+		scene = bpy.context.scene
+		scene.objects.link(obj)
+		scene.objects.active = obj
+		obj.select = True
 
-	mesh.from_pydata(verts, [], faces)
+		mesh.from_pydata(verts, [], faces)
 
-	mesh.update()
+		mesh.update()
 
-	return obj
+		return obj
 
 def random_generate(num):
     while num:
