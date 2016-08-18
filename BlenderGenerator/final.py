@@ -1,7 +1,6 @@
 import bpy
 import random
 import math
-import time
 import os
 
 BOUNDS_X1 = -4
@@ -24,14 +23,12 @@ WEIGHT_CYLINDERS = 1
 
 TOWERING_TENDENCY = 0.3
 
-INIT_FILE_PATH = "/Users/cemcan/sim.blend"
-
 sample_no = 0
 
 #dir_path = os.path.dirname(os.path.realpath(__file__))
 dir_path = "/Users/zeynep/Desktop"
 
-class RandomDesktopGenerator:
+class RandomSceneGenerator:
 
     before = True
 
@@ -42,16 +39,12 @@ class RandomDesktopGenerator:
 
     def init_scene(self):
         self.create_plane()
-        pass
 
     def create_plane(self):
         bpy.ops.mesh.primitive_plane_add()
         plane = bpy.context.active_object
         plane.location.zero()
-        plane.scale = [10000,10000,0]
-
-    def open_init_file(self):
-        bpy.ops.wm.open_mainfile(filepath=INIT_FILE_PATH)
+        plane.scale = [10000, 10000, 0]
 
     def delete_objects(self):
 
@@ -77,6 +70,7 @@ class RandomDesktopGenerator:
         mat.specular_intensity = 0.5
         mat.alpha = 1
         mat.ambient = 1
+
         return mat
 
     def set_mat(self,obj,mat):
@@ -279,6 +273,7 @@ class RandomDesktopGenerator:
         else:
             self.render(dir_path + "/Samples/sample_" + str(sample_no) + "/after_" + str(sample_no))
             self.before = True
+
         self.log(dir_path + "/Samples/sample_" + str(sample_no) + '/scene_info_' + str(sample_no))
 
     def log(self, filename):
@@ -319,8 +314,11 @@ class RandomDesktopGenerator:
 
 
 if __name__ == "__main__":
+    """
+    create and save 1000 samples
+    """
     for i in range(1000):
-        r  = RandomDesktopGenerator()
+        r  = RandomSceneGenerator()
         r.put_objects()
         r.save_blender()
         r.reconfigure_objects()
